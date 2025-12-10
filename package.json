@@ -1,7 +1,6 @@
 {
-  "name": "nodejs-hw",
+  "name": "toolnext-backend",
   "version": "1.0.0",
-  "type": "module",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
@@ -11,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yangelia/nodejs-hw.git"
+    "url": "git+https://github.com/yangelia/toolnext-backend.git"
   },
   "keywords": [],
   "author": "Yana Yanh Sychova <yana.sychova@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yangelia/nodejs-hw/issues"
+    "url": "https://github.com/yangelia/toolnext-backend/issues"
   },
-  "homepage": "https://github.com/yangelia/nodejs-hw#readme",
-  "description": "",
+  "homepage": "https://github.com/yangelia/toolnext-backend#readme",
+  "description": "Backend for ToolNext platform",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "eslint": "^9.39.1",
