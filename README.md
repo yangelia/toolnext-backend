@@ -2,27 +2,27 @@
 
 Backend для платформи ToolNext — сервісу оренди інструментів з авторизацією, управлінням інструментами, бронюваннями, відгуками та профілями користувачів.
 
-Проєкт побудований на Node.js + Express + MongoDB з використанням JWT, Multer, Cloudinary та чіткою модульною архітектурою.
+Проєкт побудований на Node.js + Express + MongoDB з чіткою модульною архітектурою, підтримкою завантаження зображень та обробкою помилок.
 
 ---
 
 ## Стек технологій
 
-Node.js, Express
+Node.js + Express
 
-MongoDB, Mongoose
+MongoDB + Mongoose
 
-JWT Authentication (access + refresh tokens)
+Авторизація (access token / cookies)
 
-Multer (завантаження фото)
+Multer — завантаження зображень
 
-Cloudinary
+Cloudinary — зберігання фото
 
-Celebrate / Joi (валідація)
+Joi / Celebrate — валідація
 
-Helmet, CORS
+Helmet + CORS
 
-Pino логування
+Pino — логування запитів
 
 ---
 
@@ -30,6 +30,7 @@ Pino логування
 
 src/
 ├─ constants/
+│
 ├─ controllers/
 │ ├─ authController.js
 │ ├─ usersController.js
@@ -38,20 +39,22 @@ src/
 │ └─ feedbackController.js
 │
 ├─ db/
-│ └─ connectMongoDB.js
+│ ├─ connectMongoDB.js
+│ └─ cloudinary.js
 │
 ├─ middleware/
 │ ├─ authenticate.js
-│ ├─ errorHandler.js
+│ ├─ upload.js
 │ ├─ logger.js
+│ ├─ errorHandler.js
 │ └─ notFoundHandler.js
 │
 ├─ models/
 │ ├─ user.js
-│ ├─ session.js
 │ ├─ tool.js
 │ ├─ booking.js
 │ └─ feedback.js
+│ (session.js — за необхідності, якщо команда обере session-based auth)
 │
 ├─ routes/
 │ ├─ authRoutes.js
@@ -75,8 +78,6 @@ src/
 │
 └─ server.js
 
-Архітектура модульна: кожен напрямок (auth, tools, booking…) має свої routes → controllers → services → models.
-
 ---
 
 ## Встановлення
@@ -88,9 +89,7 @@ src/
 2. Встановити залежності
    npm install
 
-3. Створити файл .env
-
-Скопіювати:
+3. Створити конфігураційні файли
 
 cp .env.example .env
 
@@ -119,7 +118,7 @@ POST /auth/register Реєстрація
 POST /auth/login Логін
 POST /auth/logout Логаут
 GET /auth/current Поточний користувач
-POST /auth/refresh Оновлення токену
+POST /auth/refresh Оновлення токену (якщо оберемо JWT refresh-flow)
 
 ---
 
@@ -166,5 +165,6 @@ GET /feedback/:toolId
 - глобальний error handler
 - обробник 404
 - централізовану валідацію
+- логування запитів через pino
 
 ---
