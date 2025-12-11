@@ -15,9 +15,7 @@ import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
-app.use(express.json());
-app.use(cors());
-app.use(cookieParser());
+const app = express();
 
 // middleware
 app.use(helmet());
