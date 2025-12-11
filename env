@@ -3,7 +3,8 @@ PORT=3000
 NODE_ENV=development
 
 # Database
-MONGO_URL=
+MONGO_URL=MONGO_URL=mongodb+srv://yanasychova_db_user:tvLSO1cxBxxDxhne@cluster0.hqpm7dw.mongodb.net/next_tools_db?appName=Cluster0
+
 
 # JWT
 JWT_SECRET=
@@ -15,9 +16,9 @@ JWT_REFRESH_EXPIRES=7d
 FRONTEND_DOMAIN=http://localhost:3001
 
 # Cloudinary (for photo)
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+CLOUDINARY_CLOUD_NAME=dnlu16u4a
+CLOUDINARY_API_KEY=761974821955615
+CLOUDINARY_API_SECRET=BGVTnuCNJWIOgTiXMV9kOnH97SI
 
 # SMTP (for email)
 SMTP_HOST=
