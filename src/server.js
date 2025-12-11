@@ -1,50 +1,43 @@
-import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
 
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 
 import authRoutes from './routes/authRoutes.js';
-import notesRoutes from './routes/notesRoutes.js';
+import toolsRoutes from './routes/toolsRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
-import authenticate from './middleware/authenticate.js';
-
-import { logger } from './middleware/logger.js';
-import { notFoundHandler } from './middleware/notFoundHandler.js';
-import { errorHandler } from './middleware/errorHandler.js';
-
-import { errors } from 'celebrate';
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT ?? 3000;
 
-// connect to DB BEFORE server start
-await connectMongoDB();
-
-// global middleware
-app.use(logger);
+// middleware
 app.use(helmet());
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
+app.use(cors({ origin: process.env.FRONTEND_DOMAIN, credentials: true }));
 app.use(cookieParser());
+app.use(express.json());
+app.use(logger);
 
-// auth routes (public)
+// routes
 app.use('/auth', authRoutes);
-
-// notes routes (private)
-app.use('/notes', authenticate, notesRoutes);
+app.use('/tools', toolsRoutes);
+app.use('/users', userRoutes);
 
 // 404
 app.use(notFoundHandler);
 
-// celebrate validation errors
-app.use(errors());
-
-// global error handler
+// errors
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, async () => {
+  await connectMongoDB();
   console.log(`🚀 Server running on port ${PORT}`);
 });
