@@ -7,9 +7,9 @@ import cookieParser from 'cookie-parser';
 import { connectMongoDB } from './db/connectMongoDB.js';
 
 import authRoutes from './routes/authRoutes.js';
-import notesRoutes from './routes/notesRoutes.js';
+// import notesRoutes from './routes/notesRoutes.js';
 
-import authenticate from './middleware/authenticate.js';
+// import authenticate from './middleware/authenticate.js';
 
 import { logger } from './middleware/logger.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use('/auth', authRoutes);
 
 // notes routes (private)
-app.use('/notes', authenticate, notesRoutes);
+// app.use('/notes', authenticate, notesRoutes);
 
 // 404
 app.use(notFoundHandler);
