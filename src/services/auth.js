@@ -1,11 +1,9 @@
+import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 export const registerService = async () => {};
 export const loginService = async () => {};
 export const logoutService = async () => {};
 export const getCurrentService = async () => {};
 export const refreshService = async () => {};
-// src/services/auth.js
-
-// Решта коду файла
 
 export const setSessionCookies = (res, session) => {
   res.cookie('accessToken', session.accessToken, {
