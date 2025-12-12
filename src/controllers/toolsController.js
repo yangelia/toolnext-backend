@@ -1,5 +1,7 @@
 // export const getTools = async (req, res, next) => {};
 
+import { Tool } from './models/tool.js';
+
 export const getTools = async (req, res) => {
   const { page = 1, limit = 10, category, search } = req.query;
 

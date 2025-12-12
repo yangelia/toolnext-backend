@@ -1,4 +1,4 @@
-// src/models/tool.js
+// src/models/Tool.js
 
 import { Schema, model } from 'mongoose';
 
@@ -9,6 +9,7 @@ const toolSchema = new Schema(
       ref: 'User',
       required: true,
     },
+
     category: {
       type: Schema.Types.ObjectId,
       ref: 'Category',
@@ -19,21 +20,58 @@ const toolSchema = new Schema(
       required: true,
       trim: true,
     },
+
     description: {
       type: String,
       required: false,
+      default: '',
       trim: true,
+    },
+
+    pricePerDay: {
+      type: Number,
+      required: true,
+    },
+
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    images: [
+      {
+        type: String,
+      },
+    ],
+    specifications: {
+      type: Schema.Types.Mixed, // дозволяє "Тиск", "Потужність", "Двигун" і будь-які інші ключі
+      default: {},
+    },
+
+    rentalTerms: {
+      type: String,
       default: '',
     },
-    price: Number,
-    rating: Number,
-    images: [String],
+    bookedDates: [
+      {
+        start: { type: Date, required: true },
+        end: { type: Date, required: true },
+      },
+    ],
+    feedbacks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Feedback',
+      },
+    ],
   },
+
   {
     timestamps: true,
     versionKey: false,
   },
 );
+
+export default model('Tool', toolSchema);
 
 // toolSchema.index(
 //   { title: 'text', description: 'text' },
@@ -46,19 +84,14 @@ const toolSchema = new Schema(
 
 export const Tool = model('Tool', toolSchema);
 
-// import { Schema, model } from 'mongoose';
+// src/server.js
 
-// const toolSchema = new Schema(
-//   {
-//     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-//     title: { type: String, required: true },
-//     description: String,
-//     price: Number,
-//     rating: Number,
-//     images: [String],
-//     category: String,
-//   },
-//   { timestamps: true },
-// );
+import { Student } from './models/student.js';
+// Код імпортів та підключення middleware бібліотек
 
-// export const Tool = model('Tool', toolSchema);
+app.get('/students', async (req, res) => {
+  const students = await Student.find();
+  res.status(200).json(students);
+});
+
+// Код 404 та error middleware, підключення до бази даних та старт сервера
