@@ -14,7 +14,7 @@ export const updateToolSchema = {
   [Segments.BODY]: Joi.object({
     name: Joi.string().min(3).max(96),
     pricePerDay: Joi.number().min(0),
-    category: Joi.string(),
+    category: Joi.string().custom(objectIdValidator),
     description: Joi.string().min(20).max(2000),
     rentalTerms: Joi.string().min(20).max(1000),
     specifications: Joi.string().max(1000),

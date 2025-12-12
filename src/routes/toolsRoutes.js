@@ -13,13 +13,19 @@ router.get('/:id', ctrl.getToolById);
 
 // PROTECTED ROUTES
 router.post('/', authenticate, upload.single('image'), ctrl.createTool);
-// router.patch('/:id', authenticate, upload.single('image'), ctrl.updateTool);
 router.patch(
   '/:id',
-  celebrate(updateToolSchema),
   upload.single('image'),
+  celebrate(updateToolSchema),
   ctrl.updateTool,
 );
+// router.patch(
+//   '/:id',
+//   authenticate,
+//   upload.single('image'),
+//   celebrate(updateToolSchema),
+//   ctrl.updateTool,
+// );
 router.delete('/:id', authenticate, ctrl.deleteTool);
 
 export default router;
