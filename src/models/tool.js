@@ -37,13 +37,14 @@ const toolSchema = new Schema(
       type: Number,
       default: 0,
     },
-    images: [
-      {
-        type: String,
-      },
-    ],
+    images: {
+      type: [String],
+      default: [],
+    },
+
     specifications: {
-      type: Schema.Types.Mixed, // дозволяє "Тиск", "Потужність", "Двигун" і будь-які інші ключі
+      type: Map,
+      of: String,
       default: {},
     },
 
@@ -71,27 +72,13 @@ const toolSchema = new Schema(
   },
 );
 
-export default model('Tool', toolSchema);
-
-// toolSchema.index(
-//   { title: 'text', description: 'text' },
-//   {
-//     name: 'ToolTextIndex',
-//     weights: { name: 5, description: 1 },
-//     default_language: 'english',
-//   },
-// );
+toolSchema.index(
+  { name: 'text', description: 'text' },
+  {
+    name: 'ToolTextIndex',
+    weights: { name: 5, description: 1 },
+    default_language: 'english',
+  },
+);
 
 export const Tool = model('Tool', toolSchema);
-
-// src/server.js
-
-import { Student } from './models/student.js';
-// Код імпортів та підключення middleware бібліотек
-
-app.get('/students', async (req, res) => {
-  const students = await Student.find();
-  res.status(200).json(students);
-});
-
-// Код 404 та error middleware, підключення до бази даних та старт сервера
