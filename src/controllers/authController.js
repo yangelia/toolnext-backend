@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import { FIFTEEN_MINUTES, SEVEN_DAYS } from '../constants/time.js';
 import createHttpError from 'http-errors';
 import { User } from '../models/user.js';
 import { Session } from '../models/session.js';
@@ -28,14 +29,15 @@ export const register = async (req, res, next) => {
       userId: newUser._id,
       accessToken: crypto.randomUUID(),
       refreshToken: crypto.randomUUID(),
-      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000), // 15 min
-      refreshTokenValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+      refreshTokenValidUntil: new Date(Date.now() + SEVEN_DAYS),
     });
 
     setSessionCookies(res, session);
 
     res.status(201).json({
       user: {
+        id: newUser._id,
         email: newUser.email,
       },
     });
@@ -62,16 +64,27 @@ export const login = async (req, res, next) => {
   const session = await createSession(user._id);
   setSessionCookies(res, session);
 
-  res.status(200).json(user);
+  //res.status(200).json(user);
+  res.status(200).json({
+    user: {
+      id: user._id,
+      email: user.email,
+    },
+  });
 };
 
 export const refresh = async (req, res, next) => {
   const { sessionId, refreshToken } = req.cookies;
 
+  if (!sessionId || !refreshToken) {
+    return next(createHttpError(401, 'Missing refresh credentials'));
+  }
+
   const session = await Session.findOne({
     _id: sessionId,
     refreshToken: refreshToken,
   });
+
   if (!session) {
     return next(createHttpError(401, 'Session not found'));
   }
@@ -93,7 +106,7 @@ export const refresh = async (req, res, next) => {
   res.status(200).json({ message: 'Session refreshed' });
 };
 
-export const logout = async (req, res, next) => {
+export const logout = async (req, res) => {
   const { sessionId } = req.cookies;
 
   if (sessionId) {

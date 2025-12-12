@@ -8,8 +8,7 @@ const router = Router();
 
 router.post('/register', celebrate(registerSchema), ctrl.register);
 router.post('/login', celebrate(loginSchema), ctrl.login);
-router.post('/logout', ctrl.logout);
-// router.get('/current', ctrl.getCurrent);
 router.post('/refresh', ctrl.refresh);
+router.post('/logout', ctrl.logout);
 
 export default router;
