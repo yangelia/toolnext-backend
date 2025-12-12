@@ -12,6 +12,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import authRoutes from './routes/authRoutes.js';
 import toolsRoutes from './routes/toolsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
+import { errors } from 'celebrate';
 
 dotenv.config();
 
@@ -31,6 +32,9 @@ app.use('/users', usersRoutes);
 
 // 404
 app.use(notFoundHandler);
+
+// обробка помилок від celebrate (валідація)
+app.use(errors());
 
 // errors
 app.use(errorHandler);

@@ -1,14 +1,30 @@
 import { Schema, model } from 'mongoose';
 
+// const toolSchema = new Schema(
+//   {
+//     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+//     title: { type: String, required: true },
+//     description: String,
+//     price: Number,
+//     rating: Number,
+//     images: [String],
+//     category: String,
+//   },
+//   { timestamps: true },
+// );
+
 const toolSchema = new Schema(
   {
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    title: { type: String, required: true },
+    name: { type: String, required: true },
     description: String,
-    price: Number,
+    pricePerDay: Number,
     rating: Number,
     images: [String],
     category: String,
+    // category: {type: Schema.Types.ObjectId, ref: 'Category', required: true,},
+    rentalTerms: String,
+    specifications: String,
   },
   { timestamps: true },
 );
