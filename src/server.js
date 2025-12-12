@@ -3,7 +3,12 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import dotenv from 'dotenv';
 
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
@@ -28,13 +33,20 @@ app.use(logger);
 app.use('/auth', authRoutes);
 app.use('/tools', toolsRoutes);
 app.use('/users', userRoutes);
+app.use('/tools', toolsRoutes);
+app.use('/users', userRoutes);
 
 // 404
 app.use(notFoundHandler);
 
 // errors
+// errors
 app.use(errorHandler);
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, async () => {
+  await connectMongoDB();
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
