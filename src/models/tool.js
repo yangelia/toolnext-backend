@@ -6,11 +6,26 @@ const toolSchema = new Schema(
     name: { type: String, required: true },
     description: String,
     pricePerDay: Number,
-    rating: Number,
+    rating: { type: Number, min: 0, max: 5, default: 0 },
     images: [String],
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     rentalTerms: String,
-    specifications: String,
+    specifications: { type: Schema.Types.Mixed, default: {} },
+    bookedDates: {
+      type: [
+        {
+          start: { type: Date, required: true },
+          end: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
+    feedbacks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Feedback',
+      },
+    ],
   },
   { timestamps: true },
 );
