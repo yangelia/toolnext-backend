@@ -62,7 +62,12 @@ export const login = async (req, res, next) => {
   const session = await createSession(user._id);
   setSessionCookies(res, session);
 
-  res.status(200).json(user);
+  res.status(200).json({
+    user: {
+      email: user.email,
+      username: user.username,
+    },
+  });
 };
 
 export const refresh = async (req, res, next) => {
