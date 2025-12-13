@@ -13,6 +13,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import authRoutes from './routes/authRoutes.js';
 import toolsRoutes from './routes/toolsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
+import categoriesRoutes from './routes/categoriesRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use(logger);
 app.use('/auth', authRoutes);
 app.use('/tools', toolsRoutes);
 app.use('/users', usersRoutes);
+app.use('/categories', categoriesRoutes);
 
 // 404
 app.use(notFoundHandler);
