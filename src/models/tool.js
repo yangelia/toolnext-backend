@@ -35,8 +35,11 @@ const toolSchema = new Schema(
 
     rating: {
       type: Number,
+      min: 0,
+      max: 5,
       default: 0,
     },
+
     images: {
       type: [String],
       default: [],
@@ -48,16 +51,21 @@ const toolSchema = new Schema(
       default: {},
     },
 
+    // specifications: { type: Schema.Types.Mixed, default: {} },
+
     rentalTerms: {
       type: String,
       default: '',
     },
-    bookedDates: [
-      {
-        start: { type: Date, required: true },
-        end: { type: Date, required: true },
-      },
-    ],
+    bookedDates: {
+      type: [
+        {
+          start: { type: Date, required: true },
+          end: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
     feedbacks: [
       {
         type: Schema.Types.ObjectId,
@@ -65,7 +73,6 @@ const toolSchema = new Schema(
       },
     ],
   },
-
   {
     timestamps: true,
     versionKey: false,
