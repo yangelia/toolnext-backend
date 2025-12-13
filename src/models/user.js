@@ -13,6 +13,7 @@ userSchema.pre('save', async function () {
   if (!this.username) {
     this.username = this.email;
   }
+  // await
 });
 
 userSchema.methods.toJSON = function () {
