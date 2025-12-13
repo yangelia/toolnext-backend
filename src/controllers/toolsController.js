@@ -2,7 +2,7 @@
 
 import mongoose from 'mongoose';
 
-import { Tool } from './models/tool.js';
+import { Tool } from '../models/tool.js';
 
 export const getTools = async (req, res, next) => {
   try {

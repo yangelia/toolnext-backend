@@ -3,6 +3,7 @@ import * as ctrl from '../controllers/toolsController.js';
 import { upload } from '../middleware/upload.js'; // multer
 import { authenticate } from '../middleware/authenticate.js'; // інструменти створюють авторизовані
 import { getAllToolsSchema } from '../validations/toolValidation.js';
+import { celebrate } from 'celebrate';
 
 const router = Router();
 

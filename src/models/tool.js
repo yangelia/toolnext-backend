@@ -1,4 +1,4 @@
-// src/models/Tool.js
+// src/models/tool.js
 
 import { Schema, model } from 'mongoose';
 
