@@ -26,12 +26,7 @@ export const authenticate = async (req, res, next) => {
       throw createHttpError(401);
     }
 
-    //req.user = user;
-
-    req.user = {
-      id: user._id,
-      email: user.email,
-    };
+    req.user = user;
 
     next();
   } catch (err) {
