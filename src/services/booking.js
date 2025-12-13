@@ -5,9 +5,19 @@ import { Tool } from "../models/tool.js";
 const getBookingsForTool = async (toolId) => {
   return Booking.find({ toolId }).select("startDate endDate -_id").sort({ startDate: 1 });
 };
+
+function toUTCDay(date) {
+  const d = new Date(date);
+  return new Date(Date.UTC(
+    d.getUTCFullYear(),
+    d.getUTCMonth(),
+    d.getUTCDate()
+  ));
+}
+
 const findFreeSlots = (bookings) => {
   const free = [];
-  const today = new Date(Date.now());
+const today = toUTCDay(new Date(Date.now() + 86400000));
   today.setHours(0, 0, 0, 0);
 
   if (!bookings.length) {
@@ -17,23 +27,30 @@ const findFreeSlots = (bookings) => {
   }
 
   // Сортуємо бронювання по даті початку
-  const sorted = bookings.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  const sorted = bookings
+  .map(b => ({
+    startDate: new Date(b.startDate).getTime(),
+    endDate: new Date(b.endDate).getTime()
+  }))
+    .sort((a, b) => a.startDate - b.startDate);
 
   // 1️⃣ Вільний проміжок від сьогодні до першого бронювання
   const firstStart = new Date(sorted[0].startDate);
   if (firstStart > today) {
-    free.push({ from: today, to: new Date(firstStart.getTime() - 86400000) });
+  const to = new Date(firstStart.getTime() - 86400000);
+  if (today <= to) {
+    free.push({ from: today, to });
   }
-
+}
   // 2️⃣ Вільні проміжки між бронюваннями
   for (let i = 0; i < sorted.length - 1; i++) {
     const currentEnd = new Date(sorted[i].endDate);
     const nextStart = new Date(sorted[i + 1].startDate);
 
-    if ((nextStart - currentEnd) / 86400000 > 1) {
+    if ((nextStart - currentEnd)) {
       free.push({
-        from: new Date(currentEnd.getTime() + 86400000),
-        to: new Date(nextStart.getTime() - 86400000),
+        from: new Date(currentEnd.getTime()),
+        to: new Date(nextStart.getTime()),
       });
     }
   }
@@ -44,18 +61,6 @@ const findFreeSlots = (bookings) => {
 
   return free;
 };
-
- export const getBookedDates = async (toolId) => {
-  const bookings = await Booking.find({ toolId })
-    .select("startDate endDate -_id")
-    .sort({ startDate: 1 });
-
-  const freeSlots = findFreeSlots(bookings);
-
-  return { bookedDates: bookings, freeSlots };
-};
-
-
 
 
 export const createBooking = async (userId, toolId, data) => {
@@ -69,6 +74,7 @@ export const createBooking = async (userId, toolId, data) => {
     deliveryBranch,
   } = data;
 
+  if (isNaN(new Date(startDate).getTime()) || isNaN(new Date(endDate).getTime())) throw createHttpError(400, 'Invalid date format');
   if (new Date(startDate) >= new Date(endDate)) throw createHttpError(400, 'Start date must be before end date');
   if (new Date(startDate) < new Date(Date.now())) throw createHttpError(400, 'Start date cannot be in the past');
 
@@ -85,9 +91,10 @@ export const createBooking = async (userId, toolId, data) => {
 
   // перевіряємо, чи є перетин
   const overlap = bookings.find(b =>
-    new Date(b.startDate) <= new Date(endDate) &&
-    new Date(b.endDate) >= new Date(startDate)
+    new Date(b.startDate) < new Date(endDate) &&
+    new Date(b.endDate) > new Date(startDate)
   );
+console.log("test", overlap);
 
  if (overlap) {
     return {
