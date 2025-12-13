@@ -9,11 +9,11 @@ const userSchema = new Schema(
   },
   { timestamps: true },
 );
-userSchema.pre('save', function (next) {
+userSchema.pre('save', async function () {
   if (!this.username) {
     this.username = this.email;
   }
-  next();
+  // await
 });
 
 userSchema.methods.toJSON = function () {
