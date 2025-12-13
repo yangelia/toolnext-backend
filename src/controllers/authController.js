@@ -34,7 +34,7 @@ export const register = async (req, res, next) => {
 
     setSessionCookies(res, session);
 
-    res.status(201).json({
+    return res.status(201).json({
       user: {
         email: newUser.email,
       },
