@@ -1,6 +1,6 @@
 import * as usersService from '../services/users.js';
 
-// GET /api/users/current
+// GET /users/current
 // Отримання інформації про поточного користувача (приватний)
 
 export const getCurrentUser = async (req, res, next) => {
@@ -20,7 +20,7 @@ export const getCurrentUser = async (req, res, next) => {
   }
 };
 
-// GET /api/users/:id
+// GET /users/:id
 // Отримання публічної інформації про користувача (публічний)
 
 export const getUserById = async (req, res, next) => {
@@ -40,7 +40,7 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
-// GET /api/users/:id/tools
+// GET /users/:id/tools
 // Отримання списку інструментів користувача (публічний)
 
 export const getUserTools = async (req, res, next) => {
