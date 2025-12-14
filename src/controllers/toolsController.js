@@ -12,7 +12,7 @@ export const getTools = async (req, res, next) => {
     const { page = 1, perPage = 10, category, search } = req.query;
     const skip = (page - 1) * perPage;
 
-    const toolsQuery = Tool.find().populate('category', 'title');
+    const toolsQuery = Tool.find().populate('category');
 
     // Фільтрація за категоріями
     if (category) {
@@ -50,8 +50,20 @@ export const getTools = async (req, res, next) => {
   }
 };
 
-export const getToolById = async (req, res, next) => {};
-export const createTool = async (req, res, next) => {};
+export const getToolById = async (req, res) => {
+  const { toolId } = req.params;
+
+  const tool = await Tool.findById(toolId).populate('feedbacks');
+
+  if (!tool) {
+    throw createHttpError(404, 'Tool not found');
+  }
+
+  res.status(200).json(tool);
+};
+
+
+// export const createTool = async (req, res, next) => {};
 
 export const updateTool = async (req, res, next) => {
   try {

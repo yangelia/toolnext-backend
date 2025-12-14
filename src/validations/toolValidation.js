@@ -84,6 +84,13 @@ export const getAllToolsSchema = {
   }),
 };
 
+export const toolIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    toolId: Joi.string().custom(objectIdValidator).required(),
+  }),
+};
+
+
 // export const createToolSchema = {};
 
 
