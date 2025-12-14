@@ -8,6 +8,12 @@ const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
 
+export const toolIdParamsSchema = {
+  [Segments.PARAMS]: Joi.object({
+    id: Joi.string().custom(objectIdValidator).required(),
+  }),
+};
+
 // Валідуємо об'єкт зі specifications
 const specsObjectSchema = Joi.object()
   .pattern(

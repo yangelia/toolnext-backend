@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream';
-import { v2 as cloudinary } from 'cloudinary';
+import { cloudinary } from '../config/cloudinary.js';
 
 cloudinary.config({
   secure: true,
