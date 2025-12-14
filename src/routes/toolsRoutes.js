@@ -6,12 +6,14 @@ import { celebrate } from 'celebrate';
 import {
   toolIdParamsSchema,
   updateToolSchema,
+  getAllToolsSchema
 } from '../validations/toolValidation.js';
+
 
 const router = Router();
 
 // PUBLIC ROUTES
-router.get('/', ctrl.getTools);
+router.get('/', celebrate(getAllToolsSchema), ctrl.getTools);
 router.get('/:id', ctrl.getToolById);
 
 // PROTECTED ROUTES

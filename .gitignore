@@ -144,3 +144,4 @@ vite.config.ts.timestamp-*
 
 # pullrequests list
 pullrequests-list.txt
+.env
