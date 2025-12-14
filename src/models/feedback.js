@@ -2,12 +2,14 @@ import { Schema, model } from 'mongoose';
 
 const feedbackSchema = new Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: 'User' },
-    toolId: { type: Schema.Types.ObjectId, ref: 'Tool' },
-    rating: Number,
-    text: String,
+    name: String,
+    description: String,
+    rate: Number,
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    versionKey:false,
+  },
 );
 
 export const Feedback = model('Feedback', feedbackSchema);

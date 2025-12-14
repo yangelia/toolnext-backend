@@ -27,5 +27,17 @@ export const getAllToolsSchema = {
   }),
 };
 
+function objectIdValidator(value, helpers) {
+  return !isValidObjectId(value) ? helpers.message('Invalid Id format') : value;
+}
+
+
+export const toolIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    toolId: Joi.string().custom(objectIdValidator).required(),
+  }),
+};
+
+
 // export const createToolSchema = {};
 // export const updateToolSchema = {};
