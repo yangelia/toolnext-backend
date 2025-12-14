@@ -25,8 +25,29 @@ export const updateTool = async (req, res, next) => {
       if (req.body[key] !== undefined) updateData[key] = req.body[key];
     }
 
+    // Boolean на поля та файл
+    const hasBodyUpdates = Object.keys(updateData).length > 0;
+    const hasFile = Boolean(req.file);
+    // повертаємо інструмент той, який був, якщо змін не було
+    if (!hasBodyUpdates && !hasFile) {
+      const existingTool = await Tool.findOne({ _id: id, owner: req.user._id });
+      if (!existingTool) return next(createHttpError(404, 'Tool not found'));
+      return res.status(200).json(existingTool);
+    }
+
     if (updateData.pricePerDay !== undefined) {
       updateData.pricePerDay = Number(updateData.pricePerDay);
+    }
+
+    // якщо specifications прийшло як multipart
+    if (updateData.specifications !== undefined) {
+      if (typeof updateData.specifications === 'string') {
+        try {
+          updateData.specifications = JSON.parse(updateData.specifications);
+        } catch {
+          return next(createHttpError(400, 'Invalid specifications JSON'));
+        }
+      }
     }
 
     if (req.file) {
@@ -35,12 +56,13 @@ export const updateTool = async (req, res, next) => {
     }
 
     const tool = await Tool.findOneAndUpdate(
-      { _id: id },
-      // { _id: id, owner: req.user._id },
+      // { _id: id },
+      { _id: id, owner: req.user._id },
       // req.body,
       { $set: updateData },
       {
         new: true,
+        runValidators: true,
       },
     );
     if (!tool) {

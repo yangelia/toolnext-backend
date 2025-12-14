@@ -7,6 +7,35 @@ const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
 
+// Валідуємо об'єкт зі specifications
+const specsObjectSchema = Joi.object()
+  .pattern(
+    Joi.string().min(1).max(50), //ключ
+    Joi.alternatives().try(
+      // значення
+      Joi.string().min(1).max(200),
+      Joi.number(),
+      Joi.boolean(),
+    ),
+  )
+  .max(10); // максимум пар ключ-значення
+
+// Валідація у випадку, коли specifications приходить рядком з JSON
+const jsonObjectValidator = (value, helpers) => {
+  // перевірка типу
+  if (typeof value !== 'string') return value;
+  try {
+    // розпарсимо і перевіримо структуру об'єкта
+    const parsed = JSON.parse(value);
+    const { error } = specsObjectSchema.validate(parsed);
+    if (error) return helpers.message('Invalid specifications object');
+    return value;
+    // якщо JSON.parse впав
+  } catch {
+    return helpers.message('specifications must be valid JSON');
+  }
+};
+
 export const updateToolSchema = {
   [Segments.PARAMS]: Joi.object({
     id: Joi.string().custom(objectIdValidator).required(),
@@ -17,6 +46,11 @@ export const updateToolSchema = {
     category: Joi.string().custom(objectIdValidator),
     description: Joi.string().min(20).max(2000),
     rentalTerms: Joi.string().min(20).max(1000),
-    specifications: Joi.string().max(1000),
-  }).min(1),
+    specifications: Joi.alternatives().try(
+      specsObjectSchema,
+      Joi.string().custom(jsonObjectValidator),
+    ),
+    // specifications: Joi.string().max(1000),
+    // }).min(1),
+  }),
 };
