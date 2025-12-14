@@ -1,3 +1,5 @@
+// src/models/tool.js
+
 import { Schema, model } from 'mongoose';
 
 // перевіряємо чи end йде за start по даті
@@ -74,7 +76,9 @@ const toolSchema = new Schema(
       default: '',
     },
     bookedDates: {
+
       type: [bookedRangeSchema],
+
       default: [],
     },
     feedbacks: [
@@ -95,7 +99,9 @@ toolSchema.index(
   {
     name: 'ToolTextIndex',
     weights: { name: 5, description: 1 },
+
     default_language: 'none',
+
   },
 );
 
