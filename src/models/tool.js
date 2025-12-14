@@ -1,6 +1,7 @@
 // src/models/tool.js
 
 import { Schema, model } from 'mongoose';
+import { Feedback } from '../models/feedback.js';
 
 const toolSchema = new Schema(
   {

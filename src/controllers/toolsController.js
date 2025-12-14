@@ -3,6 +3,7 @@
 import mongoose from 'mongoose';
 
 import { Tool } from '../models/tool.js';
+import { Feedback } from '../models/feedback.js';
 
 export const getTools = async (req, res, next) => {
   try {
@@ -10,7 +11,7 @@ export const getTools = async (req, res, next) => {
     const { page = 1, perPage = 10, category, search } = req.query;
     const skip = (page - 1) * perPage;
 
-    const toolsQuery = Tool.find().populate('category', 'title');
+    const toolsQuery = Tool.find().populate('category').populate('feedbacks');
 
     // Фільтрація за категоріями
     if (category) {
