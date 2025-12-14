@@ -1,9 +1,9 @@
 // src/controllers/toolsController.js
 
 import mongoose from 'mongoose';
+import createHttpError from 'http-errors';
 
 import { Tool } from '../models/tool.js';
-import { Feedback } from '../models/feedback.js';
 
 export const getTools = async (req, res, next) => {
   try {
@@ -49,7 +49,20 @@ export const getTools = async (req, res, next) => {
   }
 };
 
-export const getToolById = async (req, res, next) => {};
+export const getToolById = async (req, res) => {
+  const { toolId } = req.params;
+
+  const tool = await Tool.findById(toolId)
+    .populate('category')
+    .populate('feedbacks');
+
+  if (!tool) {
+    throw createHttpError(404, 'Tool not found');
+  }
+
+  res.status(200).json(tool);
+};
+
 export const createTool = async (req, res, next) => {};
 export const updateTool = async (req, res, next) => {};
 export const deleteTool = async (req, res, next) => {};

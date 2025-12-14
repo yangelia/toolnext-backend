@@ -29,3 +29,13 @@ export const getAllToolsSchema = {
 
 // export const createToolSchema = {};
 // export const updateToolSchema = {};
+
+const objectIdValidator = (value, helpers) => {
+  return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
+};
+
+export const toolIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    toolId: Joi.string().custom(objectIdValidator).required(),
+  }),
+};
