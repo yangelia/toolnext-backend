@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import { Tool } from '../models/tool.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
+import { deleteFromCloudinary } from '../utils/deleteFromCloudinary.js';
 
 export const getTools = async (req, res, next) => {};
 export const getToolById = async (req, res, next) => {};
@@ -52,13 +53,14 @@ export const updateTool = async (req, res, next) => {
 
     if (req.file) {
       const result = await saveFileToCloudinary(req.file.buffer);
+
       updateData.images = [result.secure_url];
+      updateData.imagePublicIds = [result.public_id];
     }
 
     const tool = await Tool.findOneAndUpdate(
       // { _id: id },
       { _id: id, owner: req.user._id },
-      // req.body,
       { $set: updateData },
       {
         new: true,
@@ -75,4 +77,33 @@ export const updateTool = async (req, res, next) => {
   }
 };
 
-export const deleteTool = async (req, res, next) => {};
+export const deleteTool = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // знаходжу tool
+    const tool = await Tool.findById(id);
+    if (!tool) return next(createHttpError(404, 'Tool not found'));
+
+    // перевірка власник чи нє
+    if (tool.owner.toString() !== req.user._id.toString()) {
+      return next(createHttpError(403, 'Forbidden'));
+    }
+
+    // видаляю фото з Cloudinary
+    const publicIds = Array.isArray(tool.imagePublicIds)
+      ? tool.imagePublicIds
+      : [];
+
+    if (publicIds.length > 0) {
+      await Promise.all(publicIds.map((pid) => deleteFromCloudinary(pid)));
+    }
+
+    // видалення з БД
+    await tool.deleteOne();
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};

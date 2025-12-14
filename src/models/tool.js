@@ -61,6 +61,12 @@ const toolSchema = new Schema(
       default: [],
     },
 
+    // для id з Cloudinary (for Delete)
+    imagePublicIds: {
+      type: [String],
+      default: [],
+    },
+
     specifications: {
       type: Map,
       of: String,

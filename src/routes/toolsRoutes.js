@@ -3,7 +3,10 @@ import * as ctrl from '../controllers/toolsController.js';
 import { upload } from '../middleware/upload.js'; // multer
 import { authenticate } from '../middleware/authenticate.js'; // інструменти створюють авторизовані
 import { celebrate } from 'celebrate';
-import { updateToolSchema } from '../validations/toolValidation.js';
+import {
+  toolIdParamsSchema,
+  updateToolSchema,
+} from '../validations/toolValidation.js';
 
 const router = Router();
 
@@ -20,6 +23,11 @@ router.patch(
   celebrate(updateToolSchema),
   ctrl.updateTool,
 );
-router.delete('/:id', authenticate, ctrl.deleteTool);
+router.delete(
+  '/:id',
+  authenticate,
+  celebrate(toolIdParamsSchema),
+  ctrl.deleteTool,
+);
 
 export default router;
