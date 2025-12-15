@@ -1,10 +1,8 @@
-
 import createHttpError from 'http-errors';
 import { Tool } from '../models/tool.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 import { deleteFromCloudinary } from '../utils/deleteFromCloudinary.js';
 import mongoose from 'mongoose';
-
 
 export const getTools = async (req, res, next) => {
   try {
@@ -62,8 +60,7 @@ export const getToolById = async (req, res) => {
   res.status(200).json(tool);
 };
 
-
-// export const createTool = async (req, res, next) => {};
+export const createTool = async (req, res, next) => {};
 
 export const updateTool = async (req, res, next) => {
   try {

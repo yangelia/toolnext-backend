@@ -7,9 +7,8 @@ import {
   toolIdParamsSchema,
   updateToolSchema,
   getAllToolsSchema,
-  toolIdSchema
+  toolIdSchema,
 } from '../validations/toolValidation.js';
-
 
 const router = Router();
 
