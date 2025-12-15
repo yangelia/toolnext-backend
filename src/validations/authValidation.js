@@ -1,12 +1,12 @@
 import { Joi, Segments } from 'celebrate';
 export const registerSchema = {
   [Segments.BODY]: Joi.object({
-    username: Joi.string().required().messages({
-      'any.required': 'Name is required',
-    }),
     email: Joi.string().email().required().messages({
       'any.required': 'Email is required',
       'string.email': 'Email must be a valid email address',
+    }),
+    username: Joi.string().required().messages({
+      'any.required': 'Name is required',
     }),
     password: Joi.string().min(6).required().messages({
       'any.required': 'Password is required',
