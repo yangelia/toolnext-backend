@@ -15,6 +15,7 @@ import toolsRoutes from './routes/toolsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
 import categoriesRoutes from './routes/categoriesRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
+import bookingRoutes from'./routes/bookingRoutes.js';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use('/tools', toolsRoutes);
 app.use('/users', usersRoutes);
 app.use('/categories', categoriesRoutes);
 app.use('/feedbacks', feedbackRoutes);
+app.use('/bookings', bookingRoutes);
 
 // 404
 app.use(notFoundHandler);

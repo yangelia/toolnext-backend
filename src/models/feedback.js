@@ -1,3 +1,5 @@
+// src/models/feedback.js
+
 import { Schema, model } from 'mongoose';
 
 const feedbackSchema = new Schema(

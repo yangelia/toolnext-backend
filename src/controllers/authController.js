@@ -124,6 +124,7 @@ export const logout = async (req, res, next) => {
 export const requestResetEmail = async (req, res)=>{
     const {email} = req.body;
 
+
     const user = await User.findOne({email});
     if(!user){
       return res.status(200).json({
@@ -131,13 +132,13 @@ export const requestResetEmail = async (req, res)=>{
       });
     }
 
+
     const resetToken = jwt.sign(
       { sub: user._id, email },
       process.env.JWT_SECRET,
       { expiresIn: '15m' },
     )
     
-  console.log(resetToken);
 
     const templatePath = path.resolve('src/templates/reset-password-email.html');
     const templateSource = await fs.readFile(templatePath, 'utf-8');
