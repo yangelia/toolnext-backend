@@ -1,4 +1,3 @@
-
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
@@ -62,8 +61,6 @@ export const updateToolSchema = {
   }),
 };
 
-
-
 // Кастомний валідатор для рядка категорій
 const categoriesValidator = (value, helpers) => {
   const ids = value.split(',');
@@ -90,21 +87,4 @@ export const toolIdSchema = {
   }),
 };
 
-
 // export const createToolSchema = {};
-<<<<<<< HEAD
-// export const updateToolSchema = {};
-
-const objectIdValidator = (value, helpers) => {
-  return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
-};
-
-export const toolIdSchema = {
-  [Segments.PARAMS]: Joi.object({
-    toolId: Joi.string().custom(objectIdValidator).required(),
-  }),
-};
-=======
-
-
->>>>>>> origin/merge-main-into-maintest
