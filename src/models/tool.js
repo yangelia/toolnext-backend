@@ -1,6 +1,7 @@
 // src/models/tool.js
 
 import { Schema, model } from 'mongoose';
+import '../models/feedback.js';
 
 // перевіряємо чи end йде за start по даті
 const bookedRangeSchema = new Schema(

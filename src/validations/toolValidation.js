@@ -1,4 +1,3 @@
-
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
@@ -62,8 +61,6 @@ export const updateToolSchema = {
   }),
 };
 
-
-
 // Кастомний валідатор для рядка категорій
 const categoriesValidator = (value, helpers) => {
   const ids = value.split(',');
@@ -90,7 +87,4 @@ export const toolIdSchema = {
   }),
 };
 
-
 // export const createToolSchema = {};
-
-
