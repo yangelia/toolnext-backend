@@ -41,26 +41,24 @@ export const getAllFeedbacks = async (req, res, next) => {
 
 export const createFeedback = async (req, res, next) => {
   try {
-        if (!req.body.toolId) {
-            return next(createHttpError(400, "Tool ID is required to create feedback"));
-        }
+    const { toolId } = req.params;
+    const feedback = await Feedback.create({
+      ...req.body,
+      toolId: toolId,
+      userId: req.user._id,
+    });
 
-        const feedback = await Feedback.create({
-            ...req.body,
-            userId: req.user._id,
-        });
+    await updateToolAverageRating(feedback.toolId);
+    await updateUserAverageRating(req.user._id);
 
-        await updateToolAverageRating(feedback.toolId);
-        await updateUserAverageRating(req.user._id);
+    res.status(201).json({
+        success: true,
+        data: feedback,
+    });
 
-        res.status(201).json({
-            success: true,
-            data: feedback,
-        });
-
-    } catch (error) {
-        next(error);
-    }
+  } catch (error) {
+      next(error);
+  }
 };
 
 export const getToolFeedbacks = async (req, res, next) => {

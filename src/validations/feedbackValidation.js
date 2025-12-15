@@ -29,6 +29,20 @@ export const feedbackSchema = {
       }),
     }),
   },
+  createWithParams: {
+        params: Joi.object().keys({
+            toolId: Joi.string().hex().length(24).required().messages({
+                'string.hex': 'Tool ID must be a valid hexadecimal string in URL.',
+                'string.length': 'Tool ID must be 24 characters long.',
+                'any.required': 'Tool ID is required in URL.',
+            }),
+        }),
+        body: Joi.object().keys({
+            name: Joi.string().min(2).max(50).required().messages({ /* ... */ }),
+            rate: Joi.number().integer().min(1).max(5).required().messages({ /* ... */ }),
+            description: Joi.string().min(3).max(500).required().messages({ /* ... */ }),
+        }),
+    },
 
   delete: {
     params: Joi.object().keys({
