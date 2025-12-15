@@ -1,6 +1,25 @@
 // src/models/tool.js
 
 import { Schema, model } from 'mongoose';
+import '../models/feedback.js';
+
+// перевіряємо чи end йде за start по даті
+const bookedRangeSchema = new Schema(
+  {
+    start: { type: Date, required: true },
+    end: {
+      type: Date,
+      required: true,
+      validate: {
+        validator: function (v) {
+          return this.start && v > this.start;
+        },
+        message: 'end must be greater than start',
+      },
+    },
+  },
+  { _id: false },
+);
 
 const toolSchema = new Schema(
   {
@@ -45,6 +64,12 @@ const toolSchema = new Schema(
       default: [],
     },
 
+    // для id з Cloudinary (for Delete)
+    imagePublicIds: {
+      type: [String],
+      default: [],
+    },
+
     specifications: {
       type: Map,
       of: String,
@@ -58,12 +83,9 @@ const toolSchema = new Schema(
       default: '',
     },
     bookedDates: {
-      type: [
-        {
-          start: { type: Date, required: true },
-          end: { type: Date, required: true },
-        },
-      ],
+
+      type: [bookedRangeSchema],
+
       default: [],
     },
     feedbacks: [
@@ -84,7 +106,9 @@ toolSchema.index(
   {
     name: 'ToolTextIndex',
     weights: { name: 5, description: 1 },
-    default_language: 'english',
+
+    default_language: 'none',
+
   },
 );
 
