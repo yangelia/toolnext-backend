@@ -23,9 +23,9 @@ export const feedbackSchema = {
       }),
 
       description: Joi.string().min(3).max(500).required().messages({
-          'number.min': 'Rating must be at least 1.',
-          'number.max': 'Rating cannot exceed 5.',
-          'any.required': 'Rating is required.',
+          'string.min': 'Description must be at least 3 characters long.',
+          'string.max': 'Description cannot exceed 500 characters.',
+          'any.required': 'Description is required.',
       }),
     }),
   },

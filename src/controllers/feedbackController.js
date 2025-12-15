@@ -2,6 +2,43 @@ import { Feedback } from '../models/feedback.js';
 import createHttpError from 'http-errors';
 import { updateToolAverageRating, updateUserAverageRating } from '../services/feedback.js';
 
+export const getAllFeedbacks = async (req, res, next) => {
+    try {
+        const page = Number(req.query.page) || 1;
+        const perPage = Number(req.query.perPage) || 10;
+        const skip = (page - 1) * perPage;
+
+        let feedbacksQuery = Feedback.find({})
+            .sort({ createdAt: -1 })
+            .populate({
+                path: 'userId',
+                select: 'name avatar',
+            })
+            .populate({
+                path: 'toolId',
+                select: 'name imageUrl category',
+            });
+
+        const [totalFeedbacks, feedbacks] = await Promise.all([
+            feedbacksQuery.clone().countDocuments(),
+            feedbacksQuery.skip(skip).limit(perPage),
+        ]);
+
+        const totalPages = Math.ceil(totalFeedbacks / perPage);
+
+        res.status(200).json({
+            page,
+            perPage,
+            totalFeedbacks,
+            totalPages,
+            feedbacks,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const createFeedback = async (req, res, next) => {
   try {
         if (!req.body.toolId) {
