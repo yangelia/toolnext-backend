@@ -4,6 +4,7 @@ import fs from 'node:fs';
 
 const uploadDir = path.resolve('uploads/tools');
 
+// створюємо директорію, якщо її ще немає
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -26,7 +27,7 @@ const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
   if (!allowedTypes.includes(file.mimetype)) {
-    cb(new Error('Only images are allowed (jpeg, png, webp)'));
+    return cb(new Error('Only images are allowed (jpeg, png, webp)'));
   }
 
   cb(null, true);
@@ -36,6 +37,6 @@ export const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 5 * 1024 * 1024, // 5 MB
   },
 });
