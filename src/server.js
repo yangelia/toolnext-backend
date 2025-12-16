@@ -15,7 +15,10 @@ import toolsRoutes from './routes/toolsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
 import categoriesRoutes from './routes/categoriesRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
-import bookingRoutes from'./routes/bookingRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger.js';
 
 dotenv.config();
 
@@ -32,6 +35,9 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use(logger);
+
+// swagger
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // routes
 app.use('/auth', authRoutes);
