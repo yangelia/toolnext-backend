@@ -4,6 +4,18 @@ import { Schema, model } from 'mongoose';
 
 const feedbackSchema = new Schema(
   {
+    toolId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Tool',
+      required: false,
+    },
+
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: false,
+    },
+
     name: {
       type: String,
       required: true,
