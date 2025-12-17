@@ -94,7 +94,6 @@ export const createBooking = async (userId, toolId, data) => {
     new Date(b.startDate) < new Date(endDate) &&
     new Date(b.endDate) > new Date(startDate)
   );
-console.log("test", overlap);
 
  if (overlap) {
     return {

@@ -107,7 +107,7 @@ export const refresh = async (req, res, next) => {
   res.status(200).json({ message: 'Session refreshed' });
 };
 
-export const logout = async (req, res, next) => {
+export const logout = async (req, res) => {
   const { sessionId } = req.cookies;
 
   if (sessionId) {
@@ -152,7 +152,7 @@ export const requestResetEmail = async (req, res) => {
       subject: 'Reset your password',
       html,
     });
-  } catch (error) {
+  } catch {
     throw createHttpError(
       500,
       'Failed to send the email, please try again later.',
@@ -170,9 +170,10 @@ export const resetPassword = async (req, res) => {
   let payload;
   try {
     payload = jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
+  } catch {
     throw createHttpError(401, 'Invalid or expired token');
   }
+
   console.log('User', payload.email, 'Id', payload.sub);
 
   const user = await User.findOne({
