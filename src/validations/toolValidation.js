@@ -66,8 +66,6 @@ export const updateToolSchema = {
       specsObjectSchema,
       Joi.string().custom(jsonObjectValidator),
     ),
-    // specifications: Joi.string().max(1000),
-    // }).min(1),
   }),
 };
 
@@ -96,6 +94,3 @@ export const toolIdSchema = {
     toolId: Joi.string().custom(objectIdValidator).required(),
   }),
 };
-
-
-

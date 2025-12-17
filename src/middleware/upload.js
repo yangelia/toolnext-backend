@@ -16,13 +16,14 @@ const storage = multer.diskStorage({
 
   filename: (req, file, cb) => {
     const uniqueName = `${Date.now()}-${Math.round(
-      Math.random() * 1e9
+      Math.random() * 1e9,
     )}${path.extname(file.originalname)}`;
 
     cb(null, uniqueName);
   },
 });
 
+//! робота з Cloudinary
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
