@@ -72,10 +72,8 @@ export const login = async (req, res, next) => {
   setSessionCookies(res, session);
 
   res.status(200).json({
-    user: {
-      userId: user._id,
-      email: user.email,
-    },
+    userId: user._id,
+    email: user.email,
   });
 };
 
