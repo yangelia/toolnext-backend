@@ -1,0 +1,56 @@
+[{
+  "_id": {
+    "$oid": "6881563901add19ee16fcff5"
+  },
+  "name": "Дмитро Романенко",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff5.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fd017"
+  },
+  "name": "Матвій Савченко",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fd017.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fd010"
+  },
+  "name": "Назар Романенко",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fd010.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fd011"
+  },
+  "name": "Богдан Коваль",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fd011.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fd014"
+  },
+  "name": "Андрій Коваленко",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fd014.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fcff7"
+  },
+  "name": "Ігор Шевчук",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcff7.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fcffa"
+  },
+  "name": "Іван Ковальчук",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fcffa.webp"
+},
+{
+  "_id": {
+    "$oid": "6881563901add19ee16fd006"
+  },
+  "name": "Олександр Мельник",
+  "avatarUrl": "https://ftp.goit.study/img/harmoniq/users/6881563901add19ee16fd006.webp"
+}]

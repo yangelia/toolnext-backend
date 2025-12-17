@@ -2,12 +2,24 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    username: { type: String },
-    avatar: { type: String },
+    email: { type: String, required: true, unique: true, trim: true },
+    password: { type: String, required: true, trim: true },
+    username: { type: String, trim: true },
+    avatar: { type: String, default: '' },
   },
   { timestamps: true },
 );
+userSchema.pre('save', async function () {
+  if (!this.username) {
+    this.username = this.email;
+  }
+  // await
+});
+
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
 
 export const User = model('User', userSchema);

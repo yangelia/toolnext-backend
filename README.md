@@ -168,3 +168,7 @@ GET /feedback/:toolId
 - логування запитів через pino
 
 ---
+
+### Categories
+
+Categories are prefilled in the shared MongoDB database.
