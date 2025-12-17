@@ -1,8 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
-export const createToolSchema = {};
-
 const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
@@ -40,6 +38,18 @@ const jsonObjectValidator = (value, helpers) => {
   } catch {
     return helpers.message('specifications must be valid JSON');
   }
+};
+
+export const createToolSchema = {
+  [Segments.BODY]: Joi.object({
+    name: Joi.string().min(3).max(100).required(),
+    pricePerDay: Joi.number().positive().required(),
+    category: Joi.string().custom(objectIdValidator).required(),
+
+    description: Joi.string().allow(''),
+    rentalTerms: Joi.string().allow(''),
+    specifications: Joi.string().allow(''),
+  }),
 };
 
 export const updateToolSchema = {
