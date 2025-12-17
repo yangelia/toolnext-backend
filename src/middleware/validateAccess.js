@@ -1,6 +1,5 @@
 import Booking from "../models/booking.js";
-
-
+//
 export default async function validateAccess(req, res, next) {
     const bookingId = req.params.bookingId;
 
