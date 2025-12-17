@@ -66,6 +66,7 @@ export const getToolById = async (req, res) => {
 
 export const createTool = async (req, res, next) => {};
 
+// оновлення інструменту
 export const updateTool = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -136,6 +137,7 @@ export const updateTool = async (req, res, next) => {
   }
 };
 
+// видалення інструменту
 export const deleteTool = async (req, res, next) => {
   try {
     const { id } = req.params;
