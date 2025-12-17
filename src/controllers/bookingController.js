@@ -1,4 +1,4 @@
-import Booking from '../models/booking.js';
+import { Booking } from '../models/booking.js';
 import { createBooking } from '../services/booking.js';
 
 // Отримання бронювань користувача
