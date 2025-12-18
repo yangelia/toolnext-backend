@@ -23,7 +23,9 @@ export const createBookingController = async (req, res, next) => {
     const userId = req.user._id;
     const { toolId } = req.params;
 
-    const booking = await createBooking(userId, toolId, req.body);
+    const booking = await Booking.find({ userId })
+      .populate('toolId')
+      .sort({ createdAt: -1 });
 
     if (booking.status === 409) {
       return res.status(booking.status).json(booking);
