@@ -9,6 +9,7 @@ import {
   updateToolSchema,
   getAllToolsSchema,
   toolIdSchema,
+  createToolSchema,
 } from '../validations/toolValidation.js';
 
 const router = Router();
@@ -18,7 +19,13 @@ router.get('/', celebrate(getAllToolsSchema), ctrl.getTools);
 router.get('/:toolId', celebrate(toolIdSchema), ctrl.getToolById);
 
 // PROTECTED ROUTES
-router.post('/', authenticate, upload.single('image'), ctrl.createTool);
+router.post(
+  '/',
+  authenticate,
+  upload.single('image'),
+  celebrate(createToolSchema),
+  ctrl.createTool,
+);
 router.patch(
   '/:id',
   authenticate,
