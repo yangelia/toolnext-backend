@@ -18,13 +18,14 @@ export const getMyBookings = async (req, res, next) => {
     next(error);
   }
 };
-
 export const createBookingController = async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { toolId } = req.params;
 
-    const booking = await createBooking(userId, toolId, req.body);
+    const bookings = await Booking.find({ userId })
+      .populate('toolId')
+      .sort({ createdAt: -1 });
 
     if (booking.status === 409) {
       return res.status(booking.status).json(booking);
@@ -34,6 +35,26 @@ export const createBookingController = async (req, res, next) => {
       status: 201,
       message: 'Booking created successfully',
       data: booking,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//! test
+export const getBooking = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
+
+    const booking = await Booking.findById(bookingId).populate('toolId');
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    return res.json({
+      message: 'Booking retrieved successfully',
+      booking,
     });
   } catch (error) {
     next(error);

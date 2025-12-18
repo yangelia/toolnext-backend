@@ -48,7 +48,11 @@ export const createToolSchema = {
 
     description: Joi.string().allow(''),
     rentalTerms: Joi.string().allow(''),
-    specifications: Joi.string().allow(''),
+    // specifications: Joi.string().allow(''),
+    specifications: Joi.alternatives().try(
+      specsObjectSchema,
+      Joi.string().custom(jsonObjectValidator),
+    ),
   }),
 };
 
