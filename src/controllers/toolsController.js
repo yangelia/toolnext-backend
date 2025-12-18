@@ -64,6 +64,86 @@ export const getToolById = async (req, res) => {
   res.status(200).json(tool);
 };
 
+// export const createTool = async (req, res, next) => {
+//   try {
+//     const {
+//       name,
+//       pricePerDay,
+//       category,
+//       description = '',
+//       rentalTerms = '',
+//       specifications = '',
+//     } = req.body;
+
+//     if (!name || category === undefined || pricePerDay === undefined) {
+//       throw createHttpError(400, 'Missing required fields');
+//     }
+
+//     const owner = req.user._id;
+
+//     const images = Array.isArray(req.files)
+//       ? req.files.map((file) => `/uploads/tools/${file.filename}`)
+//       : [];
+
+//     const parsedSpecifications = {};
+//     specifications
+//       .split('\n')
+//       .map((line) => line.trim())
+//       .filter(Boolean)
+//       .forEach((line) => {
+//         const [key, ...rest] = line.split(':');
+//         const value = rest.join(':');
+//         if (key && value) {
+//           parsedSpecifications[key.trim()] = value.trim();
+//         }
+//       });
+
+//     const tool = await Tool.create({
+//       name,
+//       pricePerDay: Number(pricePerDay),
+//       category,
+//       description,
+//       rentalTerms,
+//       specifications: parsedSpecifications,
+//       images,
+//       owner,
+//     });
+
+//     res.status(201).json(tool);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+//  хелпер на specifications:
+const normalizeSpecifications = (specifications) => {
+  if (specifications === undefined) return undefined; // для PATCH: якщо не прислали — не чіпаємо
+
+  let obj = specifications;
+
+  // form-data дає string (!)
+  if (typeof obj === 'string') {
+    if (!obj.trim()) return {}; // порожнє — ок
+    try {
+      obj = JSON.parse(obj);
+    } catch {
+      throw createHttpError(400, 'Invalid specifications JSON');
+    }
+  }
+
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+    throw createHttpError(400, 'Invalid specifications format');
+  }
+
+  // усе приводимо до рядків
+  const normalized = {};
+  for (const [k, v] of Object.entries(obj)) {
+    normalized[k] = String(v);
+  }
+  return normalized;
+};
+
+// створення інструменту
 export const createTool = async (req, res, next) => {
   try {
     const {
@@ -72,31 +152,28 @@ export const createTool = async (req, res, next) => {
       category,
       description = '',
       rentalTerms = '',
-      specifications = '',
+      specifications = {},
     } = req.body;
 
-    if (!name || category === undefined || pricePerDay === undefined) {
-      throw createHttpError(400, 'Missing required fields');
+    if (!name || !category || pricePerDay === undefined) {
+      return next(createHttpError(400, 'Missing required fields'));
     }
 
-    const owner = req.user._id;
+    const owner = req.user?._id;
+    if (!owner) return next(createHttpError(401, 'Unauthorized'));
 
-    const images = Array.isArray(req.files)
-      ? req.files.map((file) => `/uploads/tools/${file.filename}`)
-      : [];
+    // specifications -> Map(String)
+    const normalizedSpecs = normalizeSpecifications(specifications) ?? {};
 
-    const parsedSpecifications = {};
-    specifications
-      .split('\n')
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .forEach((line) => {
-        const [key, ...rest] = line.split(':');
-        const value = rest.join(':');
-        if (key && value) {
-          parsedSpecifications[key.trim()] = value.trim();
-        }
-      });
+    // Cloudinary image
+    const images = [];
+    const imagePublicIds = [];
+
+    if (req.file) {
+      const result = await saveFileToCloudinary(req.file.buffer);
+      images.push(result.secure_url);
+      imagePublicIds.push(result.public_id);
+    }
 
     const tool = await Tool.create({
       name,
@@ -104,8 +181,9 @@ export const createTool = async (req, res, next) => {
       category,
       description,
       rentalTerms,
-      specifications: parsedSpecifications,
+      specifications: normalizedSpecs,
       images,
+      imagePublicIds,
       owner,
     });
 
@@ -151,13 +229,16 @@ export const updateTool = async (req, res, next) => {
 
     // якщо specifications прийшло як multipart
     if (updateData.specifications !== undefined) {
-      if (typeof updateData.specifications === 'string') {
-        try {
-          updateData.specifications = JSON.parse(updateData.specifications);
-        } catch {
-          return next(createHttpError(400, 'Invalid specifications JSON'));
-        }
-      }
+      // if (typeof updateData.specifications === 'string') {
+      //   try {
+      //     updateData.specifications = JSON.parse(updateData.specifications);
+      //   } catch {
+      //     return next(createHttpError(400, 'Invalid specifications JSON'));
+      //   }
+      // }
+      updateData.specifications = normalizeSpecifications(
+        updateData.specifications,
+      );
     }
 
     if (req.file) {
@@ -217,4 +298,3 @@ export const deleteTool = async (req, res, next) => {
     next(error);
   }
 };
-
