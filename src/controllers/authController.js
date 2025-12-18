@@ -11,6 +11,7 @@ import { sendEmail } from '../utils/sendMail.js';
 import { User } from '../models/user.js';
 import { Session } from '../models/session.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
+import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 
 export const register = async (req, res, next) => {
   try {
@@ -36,8 +37,8 @@ export const register = async (req, res, next) => {
       userId: newUser._id,
       accessToken: crypto.randomUUID(),
       refreshToken: crypto.randomUUID(),
-      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000), // 15 min
-      refreshTokenValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES), // 15 min
+      refreshTokenValidUntil: new Date(Date.now() + ONE_DAY), // 1 days
     });
 
     setSessionCookies(res, session);
