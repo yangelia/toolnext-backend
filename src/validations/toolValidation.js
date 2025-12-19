@@ -1,8 +1,6 @@
 import { Joi, Segments } from 'celebrate';
 import { isValidObjectId } from 'mongoose';
 
-export const createToolSchema = {};
-
 const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
@@ -42,6 +40,22 @@ const jsonObjectValidator = (value, helpers) => {
   }
 };
 
+export const createToolSchema = {
+  [Segments.BODY]: Joi.object({
+    name: Joi.string().min(3).max(100).required(),
+    pricePerDay: Joi.number().positive().required(),
+    category: Joi.string().custom(objectIdValidator).required(),
+
+    description: Joi.string().allow(''),
+    rentalTerms: Joi.string().allow(''),
+    // specifications: Joi.string().allow(''),
+    specifications: Joi.alternatives().try(
+      specsObjectSchema,
+      Joi.string().custom(jsonObjectValidator),
+    ),
+  }),
+};
+
 export const updateToolSchema = {
   [Segments.PARAMS]: Joi.object({
     id: Joi.string().custom(objectIdValidator).required(),
@@ -56,8 +70,6 @@ export const updateToolSchema = {
       specsObjectSchema,
       Joi.string().custom(jsonObjectValidator),
     ),
-    // specifications: Joi.string().max(1000),
-    // }).min(1),
   }),
 };
 
@@ -86,5 +98,3 @@ export const toolIdSchema = {
     toolId: Joi.string().custom(objectIdValidator).required(),
   }),
 };
-
-// export const createToolSchema = {};

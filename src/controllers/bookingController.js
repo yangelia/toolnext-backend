@@ -1,20 +1,39 @@
-import { createBooking } from "../services/booking.js";
+import { Booking } from '../models/booking.js';
+import { createBooking } from '../services/booking.js';
 
+// Отримання бронювань користувача
+export const getMyBookings = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const bookings = await Booking.find({ userId })
+      .populate('toolId')
+      .sort({ createdAt: -1 });
+
+    return res.json({
+      message: 'My bookings retrieved successfully',
+      bookings,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const createBookingController = async (req, res, next) => {
   try {
-    // const userId = req.user._id;
-    const userId = req.user?._id || "649d1234abcd5678ef901235";
+    const userId = req.user._id;
     const { toolId } = req.params;
 
-    const booking = await createBooking(userId, toolId, req.body);
+    const booking = await Booking.find({ userId })
+      .populate('toolId')
+      .sort({ createdAt: -1 });
 
-     if (booking.status === 409) {
+    if (booking.status === 409) {
       return res.status(booking.status).json(booking);
     }
 
     res.status(201).json({
       status: 201,
-      message: "Booking created successfully",
+      message: 'Booking created successfully',
       data: booking,
     });
   } catch (error) {
@@ -22,4 +41,22 @@ export const createBookingController = async (req, res, next) => {
   }
 };
 
+//! test
+export const getBooking = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
 
+    const booking = await Booking.findById(bookingId).populate('toolId');
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    return res.json({
+      message: 'Booking retrieved successfully',
+      booking,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
