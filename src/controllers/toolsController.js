@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 export const getTools = async (req, res, next) => {
   try {
     // Параметри запиту
-    const { page = 1, perPage = 10, category, search } = req.query;
+    const { page = 1, perPage = 100, category, search } = req.query;
     const skip = (page - 1) * perPage;
 
     const toolsQuery = Tool.find().populate('category').populate('feedbacks');
