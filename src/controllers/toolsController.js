@@ -15,12 +15,23 @@ export const getTools = async (req, res, next) => {
     const toolsQuery = Tool.find().populate('category').populate('feedbacks');
 
     // Фільтрація за категоріями
+    // if (category) {
+    //   const categories = category
+    //     .split(',')
+    //     .map((id) => mongoose.Types.ObjectId(id));
+
+    //   toolsQuery.where('category').in(categories);
+    // }
+
     if (category) {
       const categories = category
         .split(',')
-        .map((id) => mongoose.Types.ObjectId(id));
+        .filter((id) => mongoose.Types.ObjectId.isValid(id))
+        .map((id) => new mongoose.Types.ObjectId(id));
 
-      toolsQuery.where('category').in(categories);
+      if (categories.length > 0) {
+        toolsQuery.where('category').in(categories);
+      }
     }
 
     // Текстовий пошук по name + description
