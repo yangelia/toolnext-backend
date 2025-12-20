@@ -53,8 +53,8 @@ src/
 │ ├─ user.js
 │ ├─ tool.js
 │ ├─ booking.js
-│ └─ feedback.js
-│ (session.js — за необхідності, якщо команда обере session-based auth)
+│ ├─ feedback.js
+│ └─ session.js — використовується для session-based auth
 │
 ├─ routes/
 │ ├─ authRoutes.js
@@ -97,8 +97,7 @@ cp .env.example .env
 
 PORT=3000
 MONGO_URL=mongodb://...
-JWT_SECRET=...
-JWT_REFRESH_SECRET=...
+JWT_SECRET=... (used for password reset)
 FRONTEND_DOMAIN=http://localhost:3001
 CLOUDINARY_CLOUD_NAME=
 CLOUDINARY_API_KEY=
@@ -117,8 +116,7 @@ CLOUDINARY_API_SECRET=
 POST /auth/register Реєстрація
 POST /auth/login Логін
 POST /auth/logout Логаут
-GET /auth/current Поточний користувач
-POST /auth/refresh Оновлення токену (якщо оберемо JWT refresh-flow)
+POST /auth/refresh Оновлення сесії (session-based auth)
 
 ---
 
@@ -171,4 +169,4 @@ GET /feedback/:toolId
 
 ### Categories
 
-Categories are prefilled in the shared MongoDB database.
+Categories are prefilled in the shared MongoDB database and exposed via public API.
