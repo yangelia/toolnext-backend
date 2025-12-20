@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from '../middleware/authenticate.js';
 import * as ctrl from '../controllers/bookingController.js';
+import validateAccess from '../middleware/validateAccess.js';
 
 const router = Router();
 
@@ -51,5 +52,8 @@ const router = Router();
  *         description: Unauthorized
  */
 router.post('/:toolId', authenticate, ctrl.createBookingController);
+
+// GET /bookings/:bookingId отримання конкретного бронювання (підтвердження)
+router.get('/:bookingId', authenticate, validateAccess, ctrl.getBooking);
 
 export default router;
