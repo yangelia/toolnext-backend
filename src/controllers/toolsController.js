@@ -9,18 +9,29 @@ import mongoose from 'mongoose';
 export const getTools = async (req, res, next) => {
   try {
     // Параметри запиту
-    const { page = 1, perPage = 10, category, search } = req.query;
+    const { page = 1, perPage = 100, category, search } = req.query;
     const skip = (page - 1) * perPage;
 
     const toolsQuery = Tool.find().populate('category').populate('feedbacks');
 
     // Фільтрація за категоріями
+    // if (category) {
+    //   const categories = category
+    //     .split(',')
+    //     .map((id) => mongoose.Types.ObjectId(id));
+
+    //   toolsQuery.where('category').in(categories);
+    // }
+
     if (category) {
       const categories = category
         .split(',')
-        .map((id) => mongoose.Types.ObjectId(id));
+        .filter((id) => mongoose.Types.ObjectId.isValid(id))
+        .map((id) => new mongoose.Types.ObjectId(id));
 
-      toolsQuery.where('category').in(categories);
+      if (categories.length > 0) {
+        toolsQuery.where('category').in(categories);
+      }
     }
 
     // Текстовий пошук по name + description
