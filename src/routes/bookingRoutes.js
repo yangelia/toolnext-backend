@@ -5,7 +5,7 @@ import * as ctrl from '../controllers/bookingController.js';
 
 const router = Router();
 
-router.post("/:toolId",   ctrl.createBookingController); // створення бронювання
+// router.post("/:toolId",   ctrl.createBookingController); // створення бронювання
 // /**
 //  * @swagger
 //  * tags:

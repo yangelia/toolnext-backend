@@ -45,7 +45,7 @@ app.use('/tools', toolsRoutes);
 app.use('/users', usersRoutes);
 app.use('/categories', categoriesRoutes);
 app.use('/feedbacks', feedbackRoutes);
-app.use('/api/bookings', bookingRoutes);
+app.use('/bookings', bookingRoutes);
 
 // 404
 app.use(notFoundHandler);
