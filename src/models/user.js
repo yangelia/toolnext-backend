@@ -4,16 +4,16 @@ const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true, trim: true },
-    username: { type: String, trim: true },
-    avatar: { type: String, default: '' },
+    name: { type: String, trim: true },
+    avatarUrl: { type: String, default: '' },
   },
   { timestamps: true },
 );
+
 userSchema.pre('save', async function () {
-  if (!this.username) {
-    this.username = this.email;
+  if (!this.name) {
+    this.name = this.email;
   }
-  // await
 });
 
 userSchema.methods.toJSON = function () {
