@@ -12,16 +12,15 @@ export const getTools = async (req, res, next) => {
     const { page = 1, perPage = 100, category, search } = req.query;
     const skip = (page - 1) * perPage;
 
-    const toolsQuery = Tool.find().populate('category').populate('feedbacks');
+    const toolsQuery = Tool.find()
+      .populate('category')
+      .populate('feedbacks')
+      .populate({
+        path: 'owner',
+        select: '_id username avatar name avatarUrl',
+      });
 
     // Фільтрація за категоріями
-    // if (category) {
-    //   const categories = category
-    //     .split(',')
-    //     .map((id) => mongoose.Types.ObjectId(id));
-
-    //   toolsQuery.where('category').in(categories);
-    // }
 
     if (category) {
       const categories = category
@@ -66,7 +65,11 @@ export const getToolById = async (req, res) => {
 
   const tool = await Tool.findById(toolId)
     .populate('category')
-    .populate('feedbacks');
+    .populate('feedbacks')
+    .populate({
+      path: 'owner',
+      select: '_id username avatar name avatarUrl',
+    });
 
   if (!tool) {
     throw createHttpError(404, 'Tool not found');
