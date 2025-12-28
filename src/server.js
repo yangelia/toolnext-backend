@@ -14,46 +14,30 @@ import authRoutes from './routes/authRoutes.js';
 import toolsRoutes from './routes/toolsRoutes.js';
 import usersRoutes from './routes/usersRoutes.js';
 import categoriesRoutes from './routes/categoriesRoutes.js';
-import feedbackRoutes from './routes/feedbackRoutes.js';
-import bookingRoutes from './routes/bookingRoutes.js';
-
-import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './swagger.js';
 
 dotenv.config();
 
 const app = express();
 
-// global middleware
-app.use(helmet());
-app.use(
-  cors({
-    origin: process.env.FRONTEND_DOMAIN,
-    credentials: true,
-  }),
-);
-app.use(cookieParser());
+/* ---------- MIDDLEWARE ---------- */
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 app.use(express.json());
+app.use(cookieParser());
+app.use(helmet());
 app.use(logger);
 
-// swagger
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+/* ---------- ROUTES ---------- */
+app.use('/api/auth', authRoutes);
+app.use('/api/tools', toolsRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/categories', categoriesRoutes);
 
-// routes
-app.use('/auth', authRoutes);
-app.use('/tools', toolsRoutes);
-app.use('/users', usersRoutes);
-app.use('/categories', categoriesRoutes);
-app.use('/feedbacks', feedbackRoutes);
-app.use('/bookings', bookingRoutes);
-
-// 404
+/* ---------- ERRORS ---------- */
 app.use(notFoundHandler);
-
-// celebrate validation errors
 app.use(errors());
-
-// global errors
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;

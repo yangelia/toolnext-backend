@@ -1,9 +1,14 @@
 import { Router } from 'express';
-import { createTool } from '../controllers/toolsController.js';
+import {
+  createTool,
+  getAllTools,
+} from '../controllers/toolsController.js';
 import { upload } from '../middleware/upload.js';
 import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
+
+router.get('/', getAllTools);
 
 router.post(
   '/',

@@ -1,6 +1,32 @@
 import { Tool } from '../models/tool.js';
 import createHttpError from 'http-errors';
 
+/* ---------- GET /api/tools ---------- */
+export const getAllTools = async (req, res, next) => {
+  try {
+    const { page = 1, perPage = 10 } = req.query;
+
+    const pageNumber = Number(page);
+    const perPageNumber = Number(perPage);
+    const skip = (pageNumber - 1) * perPageNumber;
+
+    const [tools, total] = await Promise.all([
+      Tool.find().skip(skip).limit(perPageNumber),
+      Tool.countDocuments(),
+    ]);
+
+    res.json({
+      tools,
+      page: pageNumber,
+      perPage: perPageNumber,
+      total,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/* ---------- POST /api/tools ---------- */
 export const createTool = async (req, res, next) => {
   try {
     const {
