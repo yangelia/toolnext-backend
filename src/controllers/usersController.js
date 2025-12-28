@@ -3,6 +3,18 @@ import * as usersService from '../services/users.js';
 // GET /users/current
 // Отримання інформації про поточного користувача (приватний)
 
+const normalizeUser = (user) => {
+  if (!user) return null;
+
+  return {
+    _id: user._id,
+    username: user.username || user.name || 'Користувач',
+    avatar: user.avatar || user.avatarUrl || '',
+    email: user.email || '',
+    createdAt: user.createdAt,
+  };
+};
+
 export const getCurrentUser = async (req, res, next) => {
   try {
     const userId = req.user._id;
@@ -12,7 +24,7 @@ export const getCurrentUser = async (req, res, next) => {
       status: 'success',
       message: 'Current user retrieved successfully',
       data: {
-        user,
+        user: normalizeUser(user),
       },
     });
   } catch (error) {
@@ -32,7 +44,7 @@ export const getUserById = async (req, res, next) => {
       status: 'success',
       message: 'User retrieved successfully',
       data: {
-        user,
+        user: normalizeUser(user),
       },
     });
   } catch (error) {
