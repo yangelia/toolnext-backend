@@ -13,9 +13,7 @@ export const getCurrentUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       message: 'Current user retrieved successfully',
-      data: {
-        user, // ⬅️ НИКАКОГО normalize
-      },
+      data: { user },
     });
   } catch (error) {
     next(error);
@@ -35,9 +33,7 @@ export const getUserById = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       message: 'User retrieved successfully',
-      data: {
-        user, // ⬅️ НИКАКОГО normalize
-      },
+      data: { user },
     });
   } catch (error) {
     next(error);
