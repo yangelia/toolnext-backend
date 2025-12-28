@@ -1,20 +1,10 @@
 import * as usersService from '../services/users.js';
 
+// ===============================
 // GET /users/current
 // Отримання інформації про поточного користувача (приватний)
-
-const normalizeUser = (user) => {
-  if (!user) return null;
-
-  return {
-    _id: user._id,
-    username: user.username || user.name || 'Користувач',
-    avatar: user.avatar || user.avatarUrl || '',
-    email: user.email || '',
-    createdAt: user.createdAt,
-  };
-};
-
+// ⚠️ ВАЖНО: возвращаем ПОЛНОГО user, БЕЗ normalize
+// ===============================
 export const getCurrentUser = async (req, res, next) => {
   try {
     const userId = req.user._id;
@@ -24,7 +14,7 @@ export const getCurrentUser = async (req, res, next) => {
       status: 'success',
       message: 'Current user retrieved successfully',
       data: {
-        user: normalizeUser(user),
+        user, // ⬅️ НИКАКОГО normalize
       },
     });
   } catch (error) {
@@ -32,9 +22,11 @@ export const getCurrentUser = async (req, res, next) => {
   }
 };
 
+// ===============================
 // GET /users/:id
 // Отримання публічної інформації про користувача (публічний)
-
+// ⚠️ Тоже возвращаем как есть
+// ===============================
 export const getUserById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -44,7 +36,7 @@ export const getUserById = async (req, res, next) => {
       status: 'success',
       message: 'User retrieved successfully',
       data: {
-        user: normalizeUser(user),
+        user, // ⬅️ НИКАКОГО normalize
       },
     });
   } catch (error) {
@@ -52,9 +44,10 @@ export const getUserById = async (req, res, next) => {
   }
 };
 
+// ===============================
 // GET /users/:id/tools
 // Отримання списку інструментів користувача (публічний)
-
+// ===============================
 export const getUserTools = async (req, res, next) => {
   try {
     const { id } = req.params;
