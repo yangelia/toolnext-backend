@@ -18,7 +18,7 @@ export const getCurrentUserService = async (userId) => {
 
 export const getUserByIdService = async (userId) => {
   const user = await User.findById(userId).select(
-    'username avatar email createdAt',
+    'username name avatar email createdAt',
   );
 
   if (!user) {
