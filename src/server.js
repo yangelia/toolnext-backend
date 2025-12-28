@@ -19,14 +19,22 @@ dotenv.config();
 
 const app = express();
 
-/* ---------- MIDDLEWARE ---------- */
-app.use(cors({
-  origin: true,
-  credentials: true,
-}));
+/* ---------- GLOBAL MIDDLEWARE ---------- */
+app.use(helmet());
+
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      process.env.FRONTEND_DOMAIN,
+    ],
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 app.use(cookieParser());
-app.use(helmet());
 app.use(logger);
 
 /* ---------- ROUTES ---------- */

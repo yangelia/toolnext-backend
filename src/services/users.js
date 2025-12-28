@@ -18,7 +18,7 @@ export const getCurrentUserService = async (userId) => {
 
 export const getUserByIdService = async (userId) => {
   const user = await User.findById(userId).select(
-    'username avatar email createdAt',
+    'name avatarUrl email createdAt',
   );
 
   if (!user) {
@@ -52,7 +52,7 @@ export const getUserToolsService = async (userId, options = {}) => {
   const tools = await Tool.find({ owner: userId })
     .select('-bookedDates') // Приховуємо заброньовані дати для безпеки
     .populate('category', 'name')
-    .populate('owner', 'username avatar email')
+    .populate('owner', 'name avatarUrl email')
     .sort(sortOptions)
     .skip(skip)
     .limit(limit);

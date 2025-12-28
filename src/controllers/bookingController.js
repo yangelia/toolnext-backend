@@ -2,7 +2,10 @@ import { createBooking } from "../services/booking.js";
 
 export const createBookingController = async (req, res, next) => {
   try {
-    const userId = req.user._id
+    const userId = req.user._id;
+    // console.log("user", userId);
+
+    // const userId = '692db3ffab59e437964311b7'
     const { toolId } = req.params;
 
     const booking = await createBooking(userId, toolId, req.body);

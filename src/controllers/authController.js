@@ -11,10 +11,11 @@ import { sendEmail } from '../utils/sendMail.js';
 import { User } from '../models/user.js';
 import { Session } from '../models/session.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
+import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 
 export const register = async (req, res, next) => {
   try {
-    const { username, email, password } = req.body;
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -27,7 +28,7 @@ export const register = async (req, res, next) => {
     // Створюємо користувача
     const newUser = await User.create({
       email,
-      username,
+      name,
       password: hashedPassword,
     });
 
@@ -36,8 +37,8 @@ export const register = async (req, res, next) => {
       userId: newUser._id,
       accessToken: crypto.randomUUID(),
       refreshToken: crypto.randomUUID(),
-      accessTokenValidUntil: new Date(Date.now() + 15 * 60 * 1000), // 15 min
-      refreshTokenValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+      accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+      refreshTokenValidUntil: new Date(Date.now() + ONE_DAY),
     });
 
     setSessionCookies(res, session);
@@ -45,7 +46,7 @@ export const register = async (req, res, next) => {
     return res.status(201).json({
       user: {
         email: newUser.email,
-        name: newUser.username,
+        name: newUser.name,
       },
     });
   } catch (err) {
@@ -72,10 +73,12 @@ export const login = async (req, res, next) => {
   setSessionCookies(res, session);
 
   res.status(200).json({
-    user: {
-      email: user.email,
-      username: user.username,
-    },
+    _id: user._id,
+    email: user.email,
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
   });
 };
 
@@ -141,7 +144,7 @@ export const requestResetEmail = async (req, res) => {
   const templateSource = await fs.readFile(templatePath, 'utf-8');
   const template = handlebars.compile(templateSource);
   const html = template({
-    name: user.username,
+    name: user.name,
     link: `${process.env.FRONTEND_DOMAIN}/reset-password?token=${resetToken}`,
   });
 
