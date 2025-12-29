@@ -15,7 +15,7 @@ const router = Router();
  * @swagger
  * tags:
  *   name: Auth
- *   description: Authentication endpoints
+ *   description: Authentication and session management
  */
 
 /**
@@ -30,9 +30,7 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - email
- *               - password
+ *             required: [email, password]
  *             properties:
  *               email:
  *                 type: string
@@ -44,7 +42,7 @@ const router = Router();
  *       201:
  *         description: User successfully registered
  *       400:
- *         description: Email already exists
+ *         description: Validation error or email already exists
  */
 router.post('/register', celebrate(registerSchema), ctrl.register);
 
@@ -60,9 +58,7 @@ router.post('/register', celebrate(registerSchema), ctrl.register);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - email
- *               - password
+ *             required: [email, password]
  *             properties:
  *               email:
  *                 type: string
@@ -72,9 +68,9 @@ router.post('/register', celebrate(registerSchema), ctrl.register);
  *                 example: password123
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful. Session cookies set.
  *       401:
- *         description: Invalid credentials
+ *         description: Invalid email or password
  */
 router.post('/login', celebrate(loginSchema), ctrl.login);
 
@@ -84,9 +80,13 @@ router.post('/login', celebrate(loginSchema), ctrl.login);
  *   post:
  *     summary: Logout user
  *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       204:
- *         description: Logout successful
+ *         description: Logout successful. Session cookies cleared.
+ *       401:
+ *         description: Not authenticated
  */
 router.post('/logout', ctrl.logout);
 
@@ -94,11 +94,13 @@ router.post('/logout', ctrl.logout);
  * @swagger
  * /auth/refresh:
  *   post:
- *     summary: Refresh session tokens
+ *     summary: Refresh session
  *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
- *         description: Session refreshed
+ *         description: Session refreshed. New cookies set.
  *       401:
  *         description: Invalid or expired refresh token
  */
@@ -116,8 +118,7 @@ router.post('/refresh', ctrl.refresh);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - email
+ *             required: [email]
  *             properties:
  *               email:
  *                 type: string
@@ -144,9 +145,7 @@ router.post(
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - token
- *               - password
+ *             required: [token, password]
  *             properties:
  *               token:
  *                 type: string

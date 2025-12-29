@@ -5,6 +5,13 @@ const router = Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Categories
+ *   description: Tool categories management
+ */
+
+/**
+ * @swagger
  * /categories:
  *   get:
  *     summary: Get all categories

@@ -116,7 +116,7 @@ router.get('/:toolId', celebrate(toolIdSchema), ctrl.getToolById);
  *                 format: binary
  *     responses:
  *       201:
- *         description: Tool created
+ *         description: Tool created successfully
  *       401:
  *         description: Unauthorized
  */
@@ -165,7 +165,7 @@ router.post(
  *                 format: binary
  *     responses:
  *       200:
- *         description: Tool updated
+ *         description: Tool updated successfully
  *       401:
  *         description: Unauthorized
  *       404:
@@ -195,7 +195,7 @@ router.patch(
  *           type: string
  *     responses:
  *       204:
- *         description: Tool deleted
+ *         description: Tool deleted successfully
  *       401:
  *         description: Unauthorized
  *       404:

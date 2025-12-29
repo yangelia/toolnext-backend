@@ -81,7 +81,7 @@ router.get(
  *                 example: Very good tool!
  *     responses:
  *       201:
- *         description: Feedback created
+ *         description: Feedback created successfully
  *       401:
  *         description: Unauthorized
  */
@@ -109,7 +109,7 @@ router.post(
  *         description: Feedback ID
  *     responses:
  *       204:
- *         description: Feedback deleted
+ *         description: Feedback deleted successfully
  *       401:
  *         description: Unauthorized
  */
