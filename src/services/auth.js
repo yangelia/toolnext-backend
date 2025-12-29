@@ -2,8 +2,6 @@ import crypto from 'crypto';
 import { Session } from '../models/session.js';
 import { FIFTEEN_MINUTES, ONE_DAY } from '../constants/time.js';
 
-const isProd = process.env.NODE_ENV === 'production';
-
 export const createSession = async (userId) => {
   return Session.create({
     userId,
@@ -17,22 +15,22 @@ export const createSession = async (userId) => {
 export const setSessionCookies = (res, session) => {
   const options = {
     httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
+    secure: true, // ❗ ВСЕГДА true
+    sameSite: 'none', // ❗ ВСЕГДА none для cross-domain
   };
 
   res.cookie('accessToken', session.accessToken, {
     ...options,
-    maxAge: FIFTEEN_MINUTES,
+    expires: session.accessTokenValidUntil,
   });
 
   res.cookie('refreshToken', session.refreshToken, {
     ...options,
-    maxAge: ONE_DAY,
+    expires: session.refreshTokenValidUntil,
   });
 
   res.cookie('sessionId', session._id.toString(), {
     ...options,
-    maxAge: ONE_DAY,
+    expires: session.refreshTokenValidUntil,
   });
 };
